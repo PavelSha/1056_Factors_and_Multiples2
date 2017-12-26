@@ -9,7 +9,7 @@
 #define	MAIN_H
 
 #include <iostream>
-#define MAX_SIZE_RANGE 50
+#define MAX_SIZE_RANGE 100
 #define STOP_COUNT 100000001
 
 using std::cout;

@@ -1,16 +1,20 @@
 #include "main.h"
 #include "print.h"
 #include "test.h"
+/*
+ * Координаты матрицы смежности (кмс)
+ * Последовательные коориданты вершин в графах X и Y (пкв)
+ */
 
-size_t adj_mat[MAX_SIZE_RANGE][MAX_SIZE_RANGE];
-size_t match[MAX_SIZE_RANGE][MAX_SIZE_RANGE];
-size_t path[MAX_SIZE_RANGE][MAX_SIZE_RANGE];
-size_t deg_x[MAX_SIZE_RANGE];
-size_t deg_y[MAX_SIZE_RANGE];
-size_t ind_matr_x[MAX_SIZE_RANGE];
-size_t ind_matr_y[MAX_SIZE_RANGE];
-size_t satur_matr_x[MAX_SIZE_RANGE];
-size_t satur_matr_y[MAX_SIZE_RANGE];
+size_t adj_mat[MAX_SIZE_RANGE][MAX_SIZE_RANGE]; // Матрица смежности (кмс)
+size_t match[MAX_SIZE_RANGE][MAX_SIZE_RANGE]; // Итоговое паросочетание [Matching (graph theory)] (пкв)
+size_t path[MAX_SIZE_RANGE][MAX_SIZE_RANGE]; // Текущий путь поиска паросочетания (Path) (пкв)
+size_t deg_x[MAX_SIZE_RANGE]; // Степерь графа X [Degree (graph theory)]
+size_t deg_y[MAX_SIZE_RANGE]; // Степерь графа Y [Degree (graph theory)]
+size_t ind_matr_x[MAX_SIZE_RANGE]; // Массив для матрицы смежности графа X, (пкв) -> (кмс)
+size_t ind_matr_y[MAX_SIZE_RANGE]; // Массив для матрицы смежности графа Y, (пкв) -> (кмс)
+size_t satur_matr_x[MAX_SIZE_RANGE]; // Массив вершин графа X, прошедших проверку на поиск паросочетания (помеченые)(пкв)
+size_t satur_matr_y[MAX_SIZE_RANGE]; // Массив вершин графа Y, прошедших проверку на поиск паросочетания (помеченые)(пкв)
 
 size_t stop;
 
@@ -41,6 +45,7 @@ inline int get_adj_numb(const size_t x, const size_t y) {
     return adj_mat[ind_matr_x[x]][ind_matr_y[y]];
 }
 
+// Поиск чередующей цепи
 bool try_find_chain(size_t x, size_t nx, size_t ny) {
     if (stop > STOP_COUNT) return false;
     stop++;
@@ -48,9 +53,9 @@ bool try_find_chain(size_t x, size_t nx, size_t ny) {
     size_t y, xx;
     for (y = 0; y < ny; y++) {
 //        cout << "try_find_chain for y get_adj_numb(" << x << ", " << y << "): " << get_adj_numb(x, y) << endl;
-        if (get_adj_numb(x, y) != 1) continue;
-        if (match[x][y] == 1) continue;
-        if (path[x][y] == 1) return false;
+        if (get_adj_numb(x, y) != 1) continue;  // Пропускаем, если нет ребра в матрице смежности
+        if (match[x][y] == 1) continue;         // Пропускаем, если ребро уже в паросочетании
+        if (path[x][y] == 1) return false;      // Текущий путь в поиске паросочетаний не должен хранить повторные ребра
 //        cout << "try_find_chain old y: " << ind_matr_y[y] << endl;
         if (satur_matr_y[y] == 0) {
 //        cout << "try_find_chain satur y: " << y << endl;
