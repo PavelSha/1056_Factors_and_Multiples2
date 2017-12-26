@@ -45,6 +45,37 @@ inline int get_adj_numb(const size_t x, const size_t y) {
     return adj_mat[ind_matr_x[x]][ind_matr_y[y]];
 }
 
+size_t init_match(const size_t nx, const size_t ny) {
+    size_t c = 0;
+    for (size_t x = 0; x < nx; x++) {
+        for (size_t y = 0; y < ny; y++) {
+            if (get_adj_numb(x, y) != 1) continue;
+            if (match[x][y] == 1) continue;
+            if (satur_matr_y[y] == 1) continue;
+            
+//            cout << " init match x " << x << endl;
+//            cout << " init match y " << y << endl;
+
+            match[x][y] = 1;
+            c++;
+            satur_matr_x[x] = 1;
+            satur_matr_y[y] = 1;
+            break;
+        }
+    }
+    return c;
+}
+
+void swap_adj_mat(size_t nx0, size_t ny0) {
+    size_t adj_mat_res[MAX_SIZE_RANGE][MAX_SIZE_RANGE];        
+    for (size_t x = 0; x < nx0; x++) {
+        for (size_t y = 0; y < ny0; y++) {
+            adj_mat_res[x][y] = adj_mat[x][y];
+        }
+    }
+    std::swap(adj_mat, adj_mat_res);
+}
+
 // Поиск чередующей цепи
 bool try_find_chain(size_t x, size_t nx, size_t ny) {
     if (stop > STOP_COUNT) return false;
@@ -96,7 +127,15 @@ bool try_find_chain(size_t x, size_t nx, size_t ny) {
 }
 
 size_t get_min_count(size_t nx0, size_t ny0) {
-    size_t nx, ny, i, temp, x, count;
+    size_t nx, ny, i, temp, x;
+            
+    if (nx0 > ny0) {
+        swap_adj_mat(nx0, ny0);        
+
+        temp = nx0;
+        nx0 = ny0;
+        ny0 = temp;
+    }
     
     init_matr(nx0, ind_matr_x, satur_matr_x);
     init_matr(ny0, ind_matr_y, satur_matr_y);
@@ -113,10 +152,14 @@ size_t get_min_count(size_t nx0, size_t ny0) {
 //    print_satur_matr_x(nx);
 //    print_satur_matr_y(ny);
     
-    count = 0;
+    size_t count = init_match(nx, ny);
+//    cout << " init count " << count << endl;
     stop = 0;
     for (x = 0; x < nx; x++) {
+        if (satur_matr_x[x] == 1) continue;
+        
 //        cout << " begin x : " << ind_matr_x[x] << endl;
+        
         bool res = try_find_chain(x, nx, ny);
         if (res) {
 //            cout << "increm x : " << ind_matr_x[x] << endl;
