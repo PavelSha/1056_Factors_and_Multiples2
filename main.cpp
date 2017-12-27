@@ -18,6 +18,32 @@ size_t satur_matr_y[MAX_SIZE_RANGE]; // Массив вершин графа Y, 
 
 size_t stop;
 
+void flush_adj_mat(const int size) {
+    size_t i, j;
+    for (i = 0; i < size; i++) 
+        for (j = 0; j < size; j++) {
+            adj_mat[i][j] = 0;
+            match[i][j] = 0;
+            path[i][j] = 0;
+        }
+}
+
+inline void flush_deg_x(const int size) {
+    size_t i;
+    for (i = 0; i < size; i++) deg_x[i] = 0;
+}
+
+inline void flush_deg_y(const int size) {
+    size_t i;
+    for (i = 0; i < size; i++) deg_y[i] = 0;
+}
+
+void flush(const int size) {
+    flush_adj_mat(size);
+    flush_deg_x(size);
+    flush_deg_y(size);
+}
+
 inline void init_matr(const size_t n, size_t ind[], size_t satur[]) {
     size_t i;
     for (i = 0; i < n; i++) {
@@ -178,11 +204,49 @@ size_t get_min_count(size_t nx0, size_t ny0) {
     return count;
 }
 
+int process() {
+    int t, n1, n2, num_test = 1, i, j;
+    int s1[MAX_SIZE_RANGE] = {0}, s2[MAX_SIZE_RANGE] = {0};
+    
+    size_t res;
+    
+    flush(MAX_SIZE_RANGE);
+    
+    scanf("%d",&t);
+    while (t > 0) {
+        scanf("%d",&n1);
+        for (i = 0; i < n1; i++) scanf("%d",s1[i]);
+        
+        scanf("%d",&n2);
+        for (i = 0; i < n2; i++) scanf("%d",s2[i]);
+        
+        for (i = 0; i < n1; i++) {
+            for (j = 0; j < n2; j++) {
+                if (s2[j] % s1[i] == 0) {
+                    adj_mat[i][j] = 1;
+                    deg_x[i]++;
+                    deg_y[j]++;
+                }
+            }
+            s1[i] = 0;
+        }
+        
+        res = get_min_count(n1, n2);
+        
+        printf("Case %d: %u\n", num_test++, res);
+        t--;
+        
+        if (t > 0) {
+//            for (i = 0; i < n1; i++) s1[i] = 0;
+            for (i = 0; i < n2; i++) s2[i] = 0;
+            flush(n1 > n2 ? n1 : n2);
+        }
+    }
+    
+    return 0;
+}
 
 int main() {
-    // Write ....
-    
-    // Transformation
-    tests();
+    return process();
 }
 

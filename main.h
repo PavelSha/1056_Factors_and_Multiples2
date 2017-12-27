@@ -9,6 +9,9 @@
 #define	MAIN_H
 
 #include <iostream>
+#include <vector>
+#include <stdio.h>
+
 #define MAX_SIZE_RANGE 100
 #define STOP_COUNT 100000001
 
@@ -27,6 +30,11 @@ extern size_t satur_matr_x[MAX_SIZE_RANGE];
 extern size_t satur_matr_y[MAX_SIZE_RANGE];
 
 size_t get_min_count(size_t, size_t);
+
+void flush_adj_mat(const int);
+inline void flush_deg_x(const int);
+inline void flush_deg_y(const int);
+void flush(const int);
 
 #endif	/* MAIN_H */
 
