@@ -215,10 +215,10 @@ int process() {
     scanf("%d",&t);
     while (t > 0) {
         scanf("%d",&n1);
-        for (i = 0; i < n1; i++) scanf("%d",s1[i]);
+        for (i = 0; i < n1; i++) scanf("%d",&s1[i]);
         
         scanf("%d",&n2);
-        for (i = 0; i < n2; i++) scanf("%d",s2[i]);
+        for (i = 0; i < n2; i++) scanf("%d",&s2[i]);
         
         for (i = 0; i < n1; i++) {
             for (j = 0; j < n2; j++) {
@@ -226,7 +226,7 @@ int process() {
                     adj_mat[i][j] = 1;
                     deg_x[i]++;
                     deg_y[j]++;
-                }
+        }
             }
             s1[i] = 0;
         }
